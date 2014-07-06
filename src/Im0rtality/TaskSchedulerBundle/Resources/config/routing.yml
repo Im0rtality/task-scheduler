@@ -1,0 +1,3 @@
+im0rtality_task_scheduler_homepage:
+    path:     /tasks/
+    defaults: { _controller: Im0rtalityTaskSchedulerBundle:Default:index }

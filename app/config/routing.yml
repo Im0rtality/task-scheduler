@@ -1,0 +1,4 @@
+im0rtality_task_scheduler:
+    resource: "@Im0rtalityTaskSchedulerBundle/Resources/config/routing.yml"
+    prefix:   /
+

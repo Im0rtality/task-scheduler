@@ -1,0 +1,16 @@
+parameters:
+#    im0rtality_task_scheduler.example.class: Im0rtality\TaskSchedulerBundle\Example
+
+services:
+    im0rtality_task_scheduler.mongo_client:
+        class: MongoClient
+
+    im0rtality_task_scheduler.scheduler:
+        class: Im0rtality\TaskSchedulerBundle\Core\Scheduler
+        calls:
+            - [setMongo, [@im0rtality_task_scheduler.mongo_client]]
+
+    im0rtality_task_scheduler.twig.extension.mongo_date:
+        class: Im0rtality\TaskSchedulerBundle\Twig\MongoDateExtension
+        tags:
+            - { name: twig.extension}
