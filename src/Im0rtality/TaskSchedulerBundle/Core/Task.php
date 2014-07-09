@@ -11,29 +11,44 @@ class Task
     /** @var  mixed */
     protected $payload;
 
+    /** @var  string */
+    protected $command;
+
     function __construct()
     {
         $this->taskId = md5(uniqid());
     }
 
-    public function toArray()
+    public function toMongo()
     {
         return [
             'id'      => $this->taskId,
             'at'      => new \MongoDate($this->at->getTimestamp()),
+            'command' => $this->command,
             'payload' => $this->payload,
         ];
     }
 
-    public static function fromArray($data)
+    public static function fromMongo($data)
     {
         $task = new Task();
 
         $task->at      = new \DateTime('@' . $data['at']->sec);
         $task->taskId  = $data['id'];
+        $task->command = @$data['command'];
         $task->payload = $data['payload'];
 
         return $task;
+    }
+
+    public function toJson()
+    {
+        return [
+            'id'      => $this->taskId,
+            'at'      => $this->at->format('c'),
+            'command' => $this->command,
+            'payload' => $this->payload,
+        ];
     }
 
     /**
@@ -82,5 +97,21 @@ class Task
     public function setTaskId($taskId)
     {
         $this->taskId = $taskId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommand()
+    {
+        return $this->command;
+    }
+
+    /**
+     * @param string $command
+     */
+    public function setCommand($command)
+    {
+        $this->command = $command;
     }
 }

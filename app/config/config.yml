@@ -24,6 +24,16 @@ framework:
     fragments:       ~
     http_method_override: true
 
+monolog:
+    channels:
+        - runner
+    handlers:
+        runner:
+            type:     stream
+            path:     "%kernel.logs_dir%/runner-%kernel.environment%.log"
+            level:    info
+            channels: [runner]
+
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"

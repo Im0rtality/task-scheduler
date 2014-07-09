@@ -14,7 +14,7 @@ class DefaultController extends Controller
         $scheduler = $this->get('im0rtality_task_scheduler.scheduler');
 
         $task = new Task();
-        $task->setAt(new \DateTime('+5 seconds'));
+        $task->setAt(new \DateTime('+1 seconds'));
 
         $scheduler->addTask($task);
 
@@ -24,7 +24,7 @@ class DefaultController extends Controller
                 'tasks'     => $scheduler->getAllTasks(),
                 'now'       => new \DateTime(),
                 'ready'     => $scheduler->getReadyTasks(),
-                'executing' => $scheduler->consumeNextTask(),
+//                'executing' => $scheduler->consumeNextTask(),
             )
         );
     }

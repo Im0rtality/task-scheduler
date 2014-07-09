@@ -15,6 +15,9 @@ class Scheduler
         $this->mongo = $mongo;
     }
 
+    /**
+     * @return Task|null
+     */
     public function consumeNextTask()
     {
         $current = $this->mongo->tasks->task->findAndModify(
@@ -27,12 +30,13 @@ class Scheduler
             ]
         );
 
-        return $current ? Task::fromArray($current) : null;
+        return $current ? Task::fromMongo($current) : null;
     }
 
     public function addTask(Task $task)
     {
-        $this->mongo->tasks->task->insert($task->toArray());
+        $this->mongo->tasks->task->insert($task->toMongo());
+        newrelic_notice_error('derp', new \InvalidArgumentException('cmon'));
     }
 
     public function getAllTasks()
