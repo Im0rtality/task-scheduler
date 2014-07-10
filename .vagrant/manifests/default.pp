@@ -125,6 +125,7 @@ php::module {
     'php5-mcrypt',
     'php5-common',
     'php5-xdebug',
+    'php5-mongo',
   ]:
     require => Class['php'],
 }
@@ -202,3 +203,19 @@ file { '/usr/local/bin/debug':
   mode => 755,
   content => "#!/bin/sh\nenv PHP_IDE_CONFIG=\"serverName=tsp\" XDEBUG_CONFIG=\"idekey=PHPSTORM\" SYMFONY_DEBUG=\"1\" $@"
 }
+
+### MONGODB ###
+
+file { ['/data', '/data/db']:
+  ensure  => directory,
+  mode    => 0775,
+  before  => Class['Mongodb::Globals'],
+}
+
+class {'::mongodb::globals':
+  manage_package_repo => true,
+}->
+class {'::mongodb::server':
+  port    => 27017,
+  verbose => true, }->
+class {'::mongodb::client': }
