@@ -1,39 +1,42 @@
-<p>Now: {{ now | date('Y-m-d H:i:s') }}</p>
-<p>
-    {#Executing: {% if executing is not empty %}{{ executing.taskId }} {{ executing.at | date('Y-m-d H:i:s') }}{% else %}n/a{% endif %}</p>#}
+{% extends "::fixed.html.twig" %}
 
-<table>
-    <thead>
-    <tr>
-        <th>Command</th>
-        <th>Scheduled at</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for task in tasks %}
-        <tr>
-            {#<td>{{ dump(task) }}</td>#}
-            <td>{{ task.id }}</td>
-            <td>{{ task.at | mongoDate | date('Y-m-d H:i:s') }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
+{% block container %}
+    <div class="row">
+        <div class="col-md-12"><h1>Scheduled Tasks</h1></div>
+        <div class="col-md-2">
+            <h4>Total</h4>
 
-</table>
-<table>
-    <thead>
-    <tr>
-        <th>Command</th>
-        <th>Scheduled at</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for task in ready %}
-        <tr>
-            <td>{{ task.id }}</td>
-            <td>{{ task.at | mongoDate | date('Y-m-d H:i:s') }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+            <p><span class="huge">{{ tasks.all }}</span></p>
+        </div>
+        <div class="col-md-2">
+            <h4>Ready</h4>
 
+            <p><span class="huge">{{ tasks.ready }}</span></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Next task</h4>
+            {% if peeked is not empty %}
+                <table class="table table-condensed">
+                    <thead>
+                    <tr>
+                        <th class="col-md-2">At</th>
+                        <th class="col-md-2">ID</th>
+                        <th>Data</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{{ peeked.at | date('Y-m-d H:i:s') }}</td>
+                        <td><code>{{ peeked.taskId }}</code></td>
+                        <td><code>{{ peeked.data | json_encode }}</code></td>
+                    </tr>
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Queue empty</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

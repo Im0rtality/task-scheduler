@@ -2,7 +2,8 @@
 
 namespace Im0rtality\TaskSchedulerBundle\Command;
 
-use Im0rtality\TaskSchedulerBundle\Core\Scheduler;
+use Im0rtality\TaskSchedulerBundle\Core\MongoDbBackendInterface;
+use Im0rtality\TaskSchedulerBundle\SchedulerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,23 +20,30 @@ class TasksWorkerRunCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Scheduler $scheduler */
+        /** @var SchedulerInterface $scheduler */
         $scheduler = $this->getContainer()->get('im0rtality_task_scheduler.scheduler');
         /** @var LoggerInterface $logger */
         $logger = $this->getContainer()->get('monolog.logger.runner');
         $output->writeln(sprintf('| %25s | %15s | %4s |', 'Timestamp', 'Command', 'Late (s)'));
         while (true) {
-            $task = $scheduler->consumeNextTask();
+            $task = $scheduler->getTask();
             if ($task) {
                 $output->writeln(
                     sprintf(
                         '| %25s | %15s | %4d',
-                        (new \DateTime())->format('c'),
-                        $task->getCommand() ?: '',
-                        (new \DateTime())->getTimestamp() - $task->getAt()->getTimestamp()
+                        (new \DateTime())->format('Y-m-d H:i:s'),
+                        json_encode($task->getData()) ?: 'null',
+                        time() - $task->getAt()->getTimestamp()
                     )
                 );
-                $logger->info('Scheduled task executed', $task->toJson());
+                $logger->info(
+                    'Scheduled task executed',
+                    [
+                        'id' => $task->getTaskId(),
+                        'at' => $task->getAt()->format('Y-m-d H:i:s'),
+                        'data' => $task->getData()
+                    ]
+                );
             } else {
                 sleep(1);
             }
