@@ -1,3 +1,7 @@
+im0rtality_monitoring:
+    resource: "@Im0rtalityMonitoringBundle/Resources/config/routing.yml"
+    prefix:   /
+
 im0rtality_task_scheduler:
     resource: "@Im0rtalityTaskSchedulerBundle/Resources/config/routing.yml"
     prefix:   /

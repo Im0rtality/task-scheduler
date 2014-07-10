@@ -1,0 +1,3 @@
+im0rtality_monitoring_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: Im0rtalityMonitoringBundle:Default:index }
