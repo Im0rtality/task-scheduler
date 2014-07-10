@@ -1,0 +1,13 @@
+vm:
+  box: nfq/wheezy
+  box_url: nfq/wheezy
+  hostname: task.dev # generated
+  cpu: 1
+  memory: 512
+  network:
+    private_network: 192.168.56.107 # 192.168.???.???
+    guest_port: 22
+    host_port: 9647 # ????
+  sync:
+    source: ./
+    target: /var/www/task.dev/ # generated from hostname

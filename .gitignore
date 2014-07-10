@@ -10,6 +10,6 @@
 /vendor/
 /bin/
 /composer.phar
-/.vagrant/
+/.vagrant/machines/*
 /puphpet/files/dot/ssh/*
 !puphpet/files/dot/ssh/insecure_private_key
